@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="keywords" content="html, meta tags, mobile, desktop, seo" />
+    <meta name="description" content="Guess that favicon" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>Favy</title>
+    <style>
+      :root {
+        /* Colors */
+        --correct-color: #00aa00;
+        --incorrect-color: #aa0000;
+        --text-color: #f0f0f0;
+        --base-color: #f0f0f0;
+
+        /* Animation */
+        --spring: linear(
+          0,
+          0.0019,
+          0.0074 0.96%,
+          0.0173,
+          0.0311 2.03%,
+          0.0706 3.15%,
+          0.1275 4.38%,
+          0.1858 5.45%,
+          0.2566 6.62%,
+          0.5494 11.11%,
+          0.6747 13.13%,
+          0.7896 15.22%,
+          0.8826 17.19%,
+          0.9238,
+          0.9605,
+          0.9928,
+          1.0207,
+          1.0444 22.27%,
+          1.065,
+          1.0814 24.4%,
+          1.0946 25.52%,
+          1.1059 26.96%,
+          1.1119 28.46%,
+          1.1129 30.06%,
+          1.1088 31.82%,
+          1.1024 33.26%,
+          1.0926 34.92%,
+          1.0399 42.23%,
+          1.0169 46.03%,
+          1.0071 48.11%,
+          0.9994 50.24%,
+          0.9936 52.43%,
+          0.9898 54.67%,
+          0.9874 57.77%,
+          0.9877 61.35%,
+          0.9976 74.8%,
+          1.0007 82.07%,
+          1.0006 99.95%
+        );
+        --spring-duration: 1180ms;
+        --linear: ease;
+        --linear-duration: 0.38s;
+        --ease-func: var(--linear);
+        --ease-duration: var(--linear-duration);
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        color: var(--text-color);
+        background: #001;
+      }
+
+      div {
+        box-sizing: border-box;
+      }
+
+      #app-container {
+        background: #001;
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+        padding: 1rem;
+      }
+
+      #img-dissolver {
+        width: 100vw;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .block {
+        transition: all var(--ease-func) var(--ease-duration);
+      }
+
+      #score-container {
+        display: flex;
+        gap: 3rem;
+        font-size: 1.5rem;
+        font-weight: bold;
+        padding: 0.5rem;
+        position: absolute;
+        top: 3rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+      }
+
+      #title {
+        letter-spacing: 8px;
+        padding-top: 1rem;
+      }
+
+      #correct-guesses {
+        color: var(--base-color);
+        text-shadow: 4px 0px var(--correct-color);
+        font-size: 32px;
+      }
+
+      #incorrect-guesses {
+        color: var(--base-color);
+        text-shadow: 4px 0px var(--incorrect-color);
+        font-size: 32px;
+      }
+
+      #favy-answers-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        width: 100%;
+        max-width: 600px;
+        padding-bottom: 0;
+      }
+
+      @media (min-width: 600px) {
+        #favy-answers-container {
+          grid-template-columns: 1fr 1fr;
+          padding-bottom: 2rem;
+        }
+        div#guess-announce-container {
+          margin-bottom: 4rem;
+        }
+        #score-container {
+          top: 3rem;
+          padding: 1rem;
+        }
+      }
+
+      .answer-btn {
+        background: var(--base-color);
+        color: #001;
+        padding: 1rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 8px;
+        box-shadow: 0 0 0 2px #000, 0 0 0 4px var(--base-color);
+      }
+
+      button {
+        transition: all 180ms ease;
+      }
+
+      button:active {
+        transform: scale(0.95);
+      }
+
+      .answer-btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.8;
+      }
+
+      .answer-btn.correct {
+        color: var(--correct-color);
+        box-shadow: 0 0 0 2px #000, 0 0 0 4px var(--correct-color);
+      }
+
+      .answer-btn.incorrect {
+        color: var(--incorrect-color);
+        box-shadow: 0 0 0 2px #000, 0 0 0 4px var(--incorrect-color);
+      }
+
+      #settings-container {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        z-index: 100;
+        border-radius: 50%;
+      }
+
+      #toggle-settings-button {
+        background: var(--base-color);
+        color: #001;
+        border: 2px solid #001;
+        box-shadow: 0 0 0 2px #001, 0 0 0 4px var(--base-color);
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        transition: var(--settings-transition);
+      }
+
+      #toggle-settings-button svg {
+        width: 24px;
+        height: 24px;
+        fill: #001;
+        transition: transform 0.4s ease;
+      }
+
+      #settings-options {
+        flex-direction: column;
+        display: none;
+        color: var(--text-color);
+        opacity: 0;
+        transition: opacity linear 300ms;
+      }
+
+      #settings-options h3 {
+        margin-top: 0;
+        border-bottom: 1px solid var(--text-color);
+        padding-bottom: 0.5rem;
+      }
+
+      #settings-options .settings-group {
+        margin-bottom: 1.5rem;
+      }
+
+      #settings-options select {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 4px;
+        background: var(--base-color);
+        color: #001;
+        border: 1px solid #001;
+      }
+
+      #reset {
+        background: transparent;
+        color: var(--base-color);
+        text-shadow: -2px 1px var(--incorrect-color);
+        border: 1px solid var(--incorrect-color);
+        padding: 0.5rem;
+        font-size: 1rem;
+        letter-spacing: 2px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: auto;
+        border-radius: 4px;
+        width: 100%;
+      }
+
+      #close-settings-button {
+        background: transparent;
+        margin-top: 1rem;
+        padding: 0.5rem;
+        font-size: 1rem;
+        letter-spacing: 2px;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 4px;
+        color: var(--base-color);
+        border: 1px solid var(--base-color);
+        width: 100%;
+      }
+
+      #close-settings-icon {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+      }
+
+      #close-settings-icon svg {
+        width: 24px;
+        height: 24px;
+        stroke: var(--text-color);
+      }
+
+      #settings-container.open {
+        top: 0;
+        left: 0;
+        background: #0008;
+        backdrop-filter: blur(8px) saturate(1.5);
+        border-radius: 12px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+      }
+
+      #settings-container.open #toggle-settings-button {
+        display: none;
+      }
+
+      #settings-container.open #toggle-settings-button svg {
+        transform: rotate(90deg);
+      }
+
+      #settings-container.open #settings-options {
+        pointer-events: all;
+        height: 100%;
+        width: 100%;
+        max-width: 300px;
+        max-height: 580px;
+        border-radius: 8px;
+        border: solid 1px #fff8;
+        margin: auto;
+        display: flex;
+        padding: 1rem;
+        opacity: 1;
+        background: #0008;
+      }
+
+      #guess-announce-container {
+        font-size: 2rem;
+        height: 40px;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 2rem;
+      }
+      #guess-announce-container.correct {
+        text-shadow: 4px 0px var(--correct-color);
+      }
+      #guess-announce-container.incorrect {
+        text-shadow: 4px 0px var(--incorrect-color);
+      }
+
+      #theme-options-container {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .palette-row {
+        display: flex;
+        cursor: pointer;
+        opacity: 0.3;
+        width: fit-content;
+      }
+      .palette-row.selected {
+        border: solid 1px var(--base-color);
+        opacity: 1;
+      }
+      .color-block {
+        width: 20px;
+        height: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app-container">
+      <div id="settings-container">
+        <div id="settings-options">
+          <button id="close-settings-icon" type="button">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M18 6L6 18"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M6 6L18 18"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+
+          <h3>Settings</h3>
+
+          <div class="settings-group">
+            <!-- store this in local storage on change and load in local stoarge -->
+            <label for="include-sites">Include Top Sites</label>
+            <select id="include-sites">
+              <option value="top100">Top 100</option>
+              <option value="top500">Top 500</option>
+              <option value="top1000">Top 1,000</option>
+              <option value="top5000">Top 5,000</option>
+              <option value="top10000">Top 10,000</option>
+              <option value="top20000">Top 20,000</option>
+              <option value="top50000">Top 50,000</option>
+              <option value="top100000">Top 100,000</option>
+              <option value="all">All</option>
+            </select>
+          </div>
+
+          <div class="settings-group">
+            <!-- store this in local storage on change and load in local stoarge -->
+            <label for="categories">Categories</label>
+            <select id="categories">
+              <option value="all">All</option>
+              <option value="Gaming">Gaming</option>
+              <option value="Social">Social</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Sports">Sports</option>
+              <option value="News">News</option>
+              <option value="DevTools">DevTools</option>
+              <option value="Streaming">Streaming</option>
+              <option value="Travel">Travel</option>
+              <option value="NSFW">NSFW</option>
+            </select>
+          </div>
+          <div class="settings-group">
+            <label>Animation</label>
+            <div id="animation-toggles" style="display: flex; gap: 1rem">
+              <label>
+                <input
+                  type="radio"
+                  name="animation-mode"
+                  value="spring"
+                  id="anim-spring"
+                  checked
+                />
+                Spring
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="animation-mode"
+                  value="linear"
+                  id="anim-linear"
+                />
+                Linear
+              </label>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <label>Theme</label>
+            <div id="theme-options-container"></div>
+          </div>
+          <button type="button" id="reset">Reset</button>
+          <button type="button" id="close-settings-button">close</button>
+        </div>
+        <button type="button" id="toggle-settings-button">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.2-0.37-0.26-0.59-0.18l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 l-3.84,0c-0.24,0-0.44,0.17-0.48,0.41L9.22,5.72C8.63,5.96,8.1,6.29,7.6,6.67L5.21,5.71C4.99,5.62,4.74,5.69,4.63,5.89l-1.92,3.32 C2.6,9.41,2.65,9.68,2.83,9.82l2.03,1.58C4.82,11.7,4.8,12.02,4.8,12.3c0,0.32,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.2,0.37,0.26,0.59,0.18l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.38,2.91 c0.04,0.24,0.24,0.41,0.48,0.41l3.84,0c0.24,0,0.44-0.17,0.48-0.41l0.38-2.91c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0.02,0.59-0.18l1.92-3.32c0.12-0.2,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"
+            />
+          </svg>
+        </button>
+      </div>
+      <div id="title">score</div>
+      <div id="score-container">
+        <div id="correct-guesses">0</div>
+        <div id="incorrect-guesses">0</div>
+      </div>
+
+      <div id="img-dissolver">
+        <div id="img-dissolver-container"></div>
+      </div>
+      <div id="guess-announce-container"></div>
+      <div id="favy-answers-container">
+        <button type="button" class="answer-btn" id="answer-0"></button>
+        <button type="button" class="answer-btn" id="answer-1"></button>
+        <button type="button" class="answer-btn" id="answer-2"></button>
+        <button type="button" class="answer-btn" id="answer-3"></button>
+      </div>
+    </div>
+    <script src="./GreedyMesh.js"></script>
+    <script src="./ProcessImage.js"></script>
+    <script src="./ImageCache.js"></script>
+    <script src="./ImageDisolver.js"></script>
+  </body>
+</html>
