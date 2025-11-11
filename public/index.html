@@ -98,6 +98,7 @@
       }
 
       .block {
+        will-change: transform, opacity, background-color;
         transition: all var(--ease-func) var(--ease-duration);
       }
 
@@ -108,7 +109,7 @@
         font-weight: bold;
         padding: 0.5rem;
         position: absolute;
-        top: 3rem;
+        top: 2rem;
         left: 50%;
         transform: translateX(-50%);
         z-index: 10;
@@ -116,7 +117,7 @@
 
       #title {
         letter-spacing: 8px;
-        padding-top: 1rem;
+        padding-top: 0rem;
       }
 
       #correct-guesses {
@@ -152,16 +153,23 @@
           top: 3rem;
           padding: 1rem;
         }
+        #title {
+          padding-top: 1rem;
+        }
+        button.answer-btn {
+          padding: 1rem;
+        }
       }
 
       .answer-btn {
-        background: var(--base-color);
+        position: relative;
+        background-color: var(--base-color);
         color: #001;
-        padding: 1rem;
+        padding: 0.75rem;
         font-size: 1rem;
         font-weight: 600;
         cursor: pointer;
-        border-radius: 8px;
+        border-radius: 0px;
         box-shadow: 0 0 0 2px #000, 0 0 0 4px var(--base-color);
       }
 
@@ -257,21 +265,20 @@
         font-weight: 600;
         cursor: pointer;
         margin-top: auto;
-        border-radius: 4px;
+        border-radius: 0px;
         width: 100%;
       }
 
       #close-settings-button {
-        background: transparent;
         margin-top: 1rem;
         padding: 0.5rem;
         font-size: 1rem;
         letter-spacing: 2px;
         font-weight: 600;
         cursor: pointer;
-        border-radius: 4px;
-        color: var(--base-color);
-        border: 1px solid var(--base-color);
+        border-radius: 0px;
+        background: var(--base-color);
+        box-shadow: 0 0 0 2px #000, 0 0 0 4px var(--base-color);
         width: 100%;
       }
 
