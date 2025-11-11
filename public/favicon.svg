@@ -1,0 +1,26 @@
+        <!-- SVG Code Starts Here --><svg width="90%" height="90%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+
+            <!-- 2. Stacked, Centered, and Scaled Letters --><g>
+                <!-- 'V' (Back layer, largest, dark blue) - Moved down and scaled up --><path 
+                    d="M 15 10 L 50 90 L 85 10 Z" 
+                    fill="#003366" 
+                    transform="translate(0, 5) scale(1.1)" 
+                    transform-origin="50 50"
+                />
+
+                <!-- 'A' (Middle layer, medium, mid-blue) --><!-- Path is an A-frame without crossbar for cleaner stacking --><path 
+                    d="M 25 90 L 50 10 L 75 90 H 62 L 50 50 L 38 90 Z" 
+                    fill="#007BFF" 
+                    transform="translate(0, -10) scale(1)" 
+                    transform-origin="50 50"
+                />
+                
+                <!-- 'F' (Top layer, smallest, light blue) --><path 
+                    d="M 30 10 V 90 H 45 V 60 H 70 V 50 H 45 V 20 H 75 V 10 Z" 
+                    fill="#66B2FF" 
+                    transform="translate(0, -5) scale(0.55)" 
+                    transform-origin="50 50"
+                />
+            </g>
+          
+        </svg>
